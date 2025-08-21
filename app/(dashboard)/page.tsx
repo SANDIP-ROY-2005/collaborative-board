@@ -1,15 +1,33 @@
- import { SignIn, SignInButton, UserButton } from '@clerk/nextjs'
-import React from 'react'
+"use client";
+
+import React from "react";
  
- const page = () => {
-   return (
-     <div>
-      main page
-    
+import { useOrganization } from "@clerk/nextjs";
  
-     </div>
-   )
- }
+import { EmptyOrg } from "./_components/empty-org";
+import { BoardList } from "./_components/board-list";
  
- export default page
- 
+
+interface DashboardPageProps {
+  searchParams: {
+    search?: string;
+    favorite?: string;
+  };
+}
+
+const DashboardPage = ({ searchParams, }: DashboardPageProps) => {
+  const { organization } = useOrganization();
+  return (
+    <div className=" flex-1 h-[calc(100%-80px)] p-6">
+      {/* {JSON.stringify(searchParams)}  */}
+      {!organization ? (
+        <EmptyOrg />
+      ) : (
+        <BoardList orgId={organization.id} query={searchParams} />
+       
+      )}
+    </div>
+  );
+}
+
+export default DashboardPage;
